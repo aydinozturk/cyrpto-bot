@@ -23,6 +23,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+backup_*/*
 
 # Virtual environments
 venv/
