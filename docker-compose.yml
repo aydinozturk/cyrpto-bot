@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  crypto-signal-system:
+    build: .
+    container_name: crypto-signal-bot
+    volumes:
+      # Veri ve model dosyalarını kalıcı hale getir
+      - ./data:/app/data
+      - ./models:/app/models
+      # Environment dosyasını bağla
+      - ./env:/app/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      # Web arayüzü için port (gelecekte eklenebilir)
+      - "8080:8080"
+    restart: unless-stopped
+    # Sistem kaynaklarını sınırla
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "1.0"
+        reservations:
+          memory: 1G
+          cpus: "0.5"
+
+  # Jupyter Notebook için opsiyonel servis
+  jupyter:
+    build: .
+    container_name: crypto-jupyter
+    command: >
+      bash -c "pip install jupyter && 
+               jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./notebooks:/app/notebooks
+    ports:
+      - "8888:8888"
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - development
