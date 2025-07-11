@@ -9,7 +9,7 @@ services:
       - ./data:/app/data
       - ./models:/app/models
       # Environment dosyasını bağla
-      - ./env:/app/.env
+      - ./.env:/app/.env
     environment:
       - PYTHONUNBUFFERED=1
     ports:
